@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { 
-  Headphones, 
-  MessageSquare, 
-  TrendingUp, 
-  Clock, 
+import {
+  Headphones,
+  MessageSquare,
+  TrendingUp,
+  Clock,
   Settings,
   LogOut,
   Bot,
@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { User, Session } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "react-i18next";
+import { formatTableDate, formatRelativeTime } from "@/lib/dateUtils";
 
 interface Profile {
   full_name: string | null;
@@ -29,11 +31,14 @@ interface Agent {
   voice_name: string;
   is_active: boolean;
   description: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { i18n } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -207,8 +212,8 @@ export default function Dashboard() {
                         </div>
                       </div>
                       <div className={`px-2 py-1 rounded-full text-xs ${
-                        agent.is_active 
-                          ? "bg-green-500/20 text-green-400" 
+                        agent.is_active
+                          ? "bg-green-500/20 text-green-400"
                           : "bg-muted text-muted-foreground"
                       }`}>
                         {agent.is_active ? "Активен" : "Неактивен"}
@@ -217,6 +222,9 @@ export default function Dashboard() {
                     {agent.description && (
                       <p className="text-sm text-muted-foreground mb-4">{agent.description}</p>
                     )}
+                    <p className="text-xs text-muted-foreground mb-4">
+                      Създаден: {formatRelativeTime(agent.created_at, i18n.language)}
+                    </p>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="flex-1">
                         Настройки
