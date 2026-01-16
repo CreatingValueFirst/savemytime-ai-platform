@@ -29,12 +29,28 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="space-y-6">
-            <Link to="/" className="inline-block">
-              <img
-                src="/logo.jpg"
-                alt="Save My Time Logo"
-                className="h-16 w-auto object-contain transition-all duration-300 hover:scale-105"
-              />
+            <Link to="/" className="inline-block group">
+              <div className="relative">
+                {/* Glow effect */}
+                <div className="absolute inset-0 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-500">
+                  <div className="w-full h-full bg-green-vivid/40 rounded-full"></div>
+                </div>
+
+                {/* Logo */}
+                <div className="relative flex items-center gap-3">
+                  <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-green-vivid to-green-dark glow-green-sm neon-border group-hover:scale-110 transition-transform duration-300">
+                    <span className="text-3xl font-bold text-white animate-pulse">⚡</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-2xl font-display font-bold text-gradient-green leading-tight tracking-tight">
+                      SaveMyTime
+                    </span>
+                    <span className="text-xs font-semibold text-green-light/70 tracking-widest uppercase">
+                      AI Automation Platform
+                    </span>
+                  </div>
+                </div>
+              </div>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Професионални български гласови AI агенти за виртуални рецепционисти.

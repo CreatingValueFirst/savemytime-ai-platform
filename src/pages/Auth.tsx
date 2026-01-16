@@ -103,12 +103,28 @@ export default function Auth() {
       
       <div className="w-full max-w-md relative z-10">
         {/* Logo */}
-        <Link to="/" className="flex justify-center mb-8 group">
-          <img
-            src="/logo.jpg"
-            alt="Save My Time Logo"
-            className="h-20 w-auto object-contain transition-all duration-300 group-hover:scale-105"
-          />
+        <Link to="/" className="flex justify-center mb-10 group">
+          <div className="relative">
+            {/* Intense glow effect */}
+            <div className="absolute inset-0 blur-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-700 animate-pulse">
+              <div className="w-full h-full bg-green-neon/50 rounded-full scale-150"></div>
+            </div>
+
+            {/* Hero Logo */}
+            <div className="relative flex flex-col items-center gap-4">
+              <div className="flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-green-neon via-green-vivid to-green glow-green-intense neon-border group-hover:scale-110 transition-all duration-500">
+                <span className="text-5xl font-bold text-white scale-pulse">⚡</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <span className="text-4xl font-display font-extrabold text-gradient-green leading-tight tracking-tight text-glow">
+                  SaveMyTime
+                </span>
+                <span className="text-sm font-bold text-green-light tracking-widest uppercase mt-1">
+                  AI Automation Platform
+                </span>
+              </div>
+            </div>
+          </div>
         </Link>
 
         {/* Auth Card */}

@@ -41,12 +41,28 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <img
-              src="/logo.jpg"
-              alt="Save My Time Logo"
-              className="h-12 w-auto object-contain transition-all duration-300 group-hover:scale-105"
-            />
+          <Link to="/" className="flex items-center gap-3 group relative">
+            <div className="relative">
+              {/* Glow effect behind text */}
+              <div className="absolute inset-0 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                <div className="w-full h-full bg-green-vivid/30 rounded-full scale-150"></div>
+              </div>
+
+              {/* Logo Text */}
+              <div className="relative flex items-center gap-2">
+                <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-green-vivid to-green glow-green-sm neon-border">
+                  <span className="text-2xl font-bold text-white animate-pulse">⚡</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xl font-display font-bold text-gradient-green leading-tight tracking-tight group-hover:text-glow transition-all duration-300">
+                    SaveMyTime
+                  </span>
+                  <span className="text-[10px] font-medium text-green-light/80 tracking-wider uppercase">
+                    AI Automation
+                  </span>
+                </div>
+              </div>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
