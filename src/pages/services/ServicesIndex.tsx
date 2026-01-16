@@ -10,84 +10,58 @@ import {
   Globe,
   Code,
   Package,
+  Smartphone,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const services = [
   {
     id: "customer-support",
     icon: Headphones,
-    title: "24/7 Клиентска поддръжка",
-    solves: "Клиентите ви чакат отговор, докато екипът ви спи или е зает.",
-    benefits: [
-      "Автоматични отговори денонощно",
-      "Събиране на запитвания и лийдове",
-      "Прехвърляне към човек при нужда",
-    ],
+    serviceKey: "service1",
     href: "/services/customer-support",
   },
   {
     id: "internal-operations",
     icon: Zap,
-    title: "Вътрешни операции",
-    solves: "Екипът губи часове в търсене на информация и ръчна администрация.",
-    benefits: [
-      "Мигновено намиране на документи",
-      "Автоматизирани заявки и одобрения",
-      "Интеграция с вашите системи",
-    ],
+    serviceKey: "service2",
     href: "/services/internal-operations",
   },
   {
     id: "voice-agent",
     icon: Phone,
-    title: "Обработка на обаждания",
-    solves: "Пропускате обаждания и губите потенциални клиенти.",
-    benefits: [
-      "Отговаря на всяко обаждане 24/7",
-      "Записва заявки и насочва към екипа",
-      "Интеграция с CRM системи",
-    ],
+    serviceKey: "service3",
     href: "/services/voice-agent",
   },
   {
     id: "lead-generation",
     icon: Target,
-    title: "Генериране на лийдове",
-    solves: "Продажбите ви зависят от ръчно търсене на клиенти.",
-    benefits: [
-      "Автоматично намиране на потенциални клиенти",
-      "Квалифициране и подготовка на лийдове",
-      "Директна връзка с продажбения процес",
-    ],
+    serviceKey: "service4",
     href: "/services/lead-generation",
   },
   {
     id: "geo",
     icon: Globe,
-    title: "Уеб оптимизация (GEO)",
-    solves: "Сайтът ви не се намира и не превръща посетители в клиенти.",
-    benefits: [
-      "По-добро класиране в търсачките",
-      "По-бързо зареждане на сайта",
-      "Повече реални запитвания",
-    ],
+    serviceKey: "service5",
     href: "/services/geo",
   },
   {
     id: "custom-ai",
     icon: Code,
-    title: "Персонализиран AI",
-    solves: "Стандартните инструменти не отговарят на вашите специфични нужди.",
-    benefits: [
-      "Решение по ваша мярка",
-      "Интеграция със съществуващи процеси",
-      "Пълна собственост върху системата",
-    ],
+    serviceKey: "service6",
     href: "/services/custom-ai",
+  },
+  {
+    id: "custom-apps",
+    icon: Smartphone,
+    serviceKey: "service7",
+    href: "/services/custom-apps",
   },
 ];
 
 export default function ServicesIndex() {
+  const { t } = useTranslation();
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -96,12 +70,12 @@ export default function ServicesIndex() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center px-2">
             <h1 className="text-2xl sm:text-3xl md:text-5xl font-display font-bold mb-6 leading-tight">
-              <span className="text-gradient-gold">AI автоматизация</span>
+              <span className="text-gradient-gold">{t('services.heading')}</span>
               <br />
-              за реални бизнес резултати
+              {t('services.headingSecond')}
             </h1>
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-2">
-              Ясни решения за продажби, поддръжка и операции – без излишна сложност.
+              {t('services.subheading')}
             </p>
           </div>
         </div>
@@ -123,29 +97,35 @@ export default function ServicesIndex() {
                       <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                     </div>
                     <h3 className="text-base sm:text-lg md:text-xl font-display font-bold text-foreground leading-tight">
-                      {service.title}
+                      {t(`services.${service.serviceKey}.title`)}
                     </h3>
                   </div>
 
                   <p className="text-muted-foreground mb-4 text-sm">
-                    <span className="text-primary font-medium">Какво решава:</span> {service.solves}
+                    <span className="text-primary font-medium">{t('services.whatItSolves')}</span> {t(`services.${service.serviceKey}.solves`)}
                   </p>
 
                   <div className="mb-6 flex-grow">
-                    <p className="text-sm font-medium text-foreground mb-2">Какво получавате:</p>
+                    <p className="text-sm font-medium text-foreground mb-2">{t('services.whatYouGet')}</p>
                     <ul className="space-y-2">
-                      {service.benefits.map((benefit, index) => (
-                        <li key={index} className="text-sm text-muted-foreground flex items-start gap-2">
-                          <span className="text-primary mt-1">•</span>
-                          {benefit}
-                        </li>
-                      ))}
+                      <li className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-1">•</span>
+                        {t(`services.${service.serviceKey}.benefit1`)}
+                      </li>
+                      <li className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-1">•</span>
+                        {t(`services.${service.serviceKey}.benefit2`)}
+                      </li>
+                      <li className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-1">•</span>
+                        {t(`services.${service.serviceKey}.benefit3`)}
+                      </li>
                     </ul>
                   </div>
 
                   <Link to={service.href}>
                     <Button variant="outline" className="w-full border-primary/50 hover:bg-primary/10">
-                      Виж детайли
+                      {t('services.viewDetails')}
                       <ArrowRight className="ml-2 w-4 h-4" />
                     </Button>
                   </Link>
@@ -164,14 +144,14 @@ export default function ServicesIndex() {
               <Package className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
             </div>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-display font-bold mb-3 sm:mb-4 text-gradient-gold leading-tight px-2">
-              Не сте сигурни кое ви трябва?
+              {t('services.notSure')}
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 px-2">
-              Вижте нашите комбинирани пакети – готови решения за най-честите бизнес нужди.
+              {t('services.notSureDesc')}
             </p>
             <Link to="/services/packages">
               <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                Виж най-желаните пакети
+                {t('services.viewPackages')}
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>

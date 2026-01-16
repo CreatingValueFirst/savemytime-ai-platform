@@ -7,10 +7,12 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Headphones, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Auth() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -53,8 +55,8 @@ export default function Auth() {
         if (error) throw error;
 
         toast({
-          title: "Добре дошли!",
-          description: "Успешно влязохте в профила си."
+          title: t('auth.welcomeToast'),
+          description: t('auth.loginSuccess')
         });
       } else {
         const { error } = await supabase.auth.signUp({
@@ -71,24 +73,24 @@ export default function Auth() {
         if (error) throw error;
 
         toast({
-          title: "Профилът е създаден!",
-          description: "Вече сте регистрирани и влезли в системата."
+          title: t('auth.accountCreated'),
+          description: t('auth.signupSuccess')
         });
       }
     } catch (error: any) {
       console.error("Auth error:", error);
-      let errorMessage = "Моля, опитайте отново.";
-      
+      let errorMessage = t('auth.tryAgain');
+
       if (error.message?.includes("Invalid login credentials")) {
-        errorMessage = "Грешен email или парола.";
+        errorMessage = t('auth.wrongCredentials');
       } else if (error.message?.includes("User already registered")) {
-        errorMessage = "Този email вече е регистриран.";
+        errorMessage = t('auth.emailExists');
       } else if (error.message?.includes("Password should be at least")) {
-        errorMessage = "Паролата трябва да е поне 6 символа.";
+        errorMessage = t('auth.passwordLength');
       }
 
       toast({
-        title: "Грешка",
+        title: t('auth.error'),
         description: errorMessage,
         variant: "destructive"
       });
@@ -131,24 +133,24 @@ export default function Auth() {
         <div className="glass rounded-3xl p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-display font-bold mb-2">
-              {isLogin ? "Добре дошли" : "Създайте профил"}
+              {isLogin ? t('auth.welcome') : t('auth.createAccount')}
             </h1>
             <p className="text-muted-foreground">
-              {isLogin 
-                ? "Влезте в клиентския си портал" 
-                : "Започнете да автоматизирате бизнеса си"}
+              {isLogin
+                ? t('auth.loginSubtitle')
+                : t('auth.signupSubtitle')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-2">
-                <Label htmlFor="fullName">Име</Label>
+                <Label htmlFor="fullName">{t('auth.fullName')}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="fullName"
-                    placeholder="Вашето име"
+                    placeholder={t('auth.fullNamePlaceholder')}
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                     className="pl-10 bg-muted/50"
@@ -159,7 +161,7 @@ export default function Auth() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('auth.email')}</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -175,7 +177,7 @@ export default function Auth() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Парола</Label>
+              <Label htmlFor="password">{t('auth.password')}</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -200,7 +202,7 @@ export default function Auth() {
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  {isLogin ? "Вход" : "Регистрация"}
+                  {isLogin ? t('auth.login') : t('auth.signup')}
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </>
               )}
@@ -213,16 +215,16 @@ export default function Auth() {
               onClick={() => setIsLogin(!isLogin)}
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
-              {isLogin 
-                ? "Нямате профил? Регистрирайте се" 
-                : "Вече имате профил? Влезте"}
+              {isLogin
+                ? t('auth.noAccount')
+                : t('auth.hasAccount')}
             </button>
           </div>
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           <Link to="/" className="hover:text-primary transition-colors">
-            ← Обратно към началната страница
+            {t('auth.backToHome')}
           </Link>
         </p>
       </div>

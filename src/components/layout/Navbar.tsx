@@ -3,15 +3,17 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Headphones, User, Sparkles, Cpu, TrendingUp, Calculator, DollarSign, MessageSquare, LayoutDashboard, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const navLinks = [
-  { href: "/", label: "Начало" },
-  { href: "/voices", label: "Гласове" },
-  { href: "/services", label: "Услуги" },
-  { href: "/services/packages", label: "Пакети" },
-  { href: "/cases", label: "Разработки" },
-  { href: "/pricing", label: "Цени" },
-  { href: "/contact", label: "Контакт" },
+  { href: "/", key: "home" },
+  { href: "/voices", key: "voices" },
+  { href: "/services", key: "services" },
+  { href: "/services/packages", key: "packages" },
+  { href: "/cases", key: "cases" },
+  { href: "/pricing", key: "pricing" },
+  { href: "/contact", key: "contact" },
 ];
 
 // Page-specific icons mapping
@@ -30,6 +32,7 @@ const pageIcons: Record<string, { icon: React.ElementType; animated?: boolean }>
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { t } = useTranslation();
 
   // Get the current page icon
   const currentPageConfig = pageIcons[location.pathname] || { icon: Bot, animated: false };
@@ -78,22 +81,23 @@ export function Navbar() {
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
               >
-                {link.label}
+                {t(`nav.${link.key}`)}
               </Link>
             ))}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons & Language Switcher */}
           <div className="hidden lg:flex items-center gap-3">
+            <LanguageSwitcher />
             <Link to="/auth">
               <Button variant="ghost" size="sm" className="gap-2">
                 <User className="w-4 h-4" />
-                Вход
+                {t('nav.login')}
               </Button>
             </Link>
             <Link to="/contact">
               <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90 glow-gold-sm">
-                Безплатна консултация
+                {t('nav.freeCons')}
               </Button>
             </Link>
           </div>
@@ -125,19 +129,22 @@ export function Navbar() {
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
               >
-                {link.label}
+                {t(`nav.${link.key}`)}
               </Link>
             ))}
             <div className="pt-4 flex flex-col gap-2">
+              <div className="mb-2">
+                <LanguageSwitcher />
+              </div>
               <Link to="/auth" onClick={() => setIsOpen(false)}>
                 <Button variant="outline" className="w-full gap-2">
                   <User className="w-4 h-4" />
-                  Вход
+                  {t('nav.login')}
                 </Button>
               </Link>
               <Link to="/contact" onClick={() => setIsOpen(false)}>
                 <Button className="w-full bg-primary text-primary-foreground">
-                  Безплатна консултация
+                  {t('nav.freeCons')}
                 </Button>
               </Link>
             </div>

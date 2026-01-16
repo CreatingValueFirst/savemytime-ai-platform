@@ -12,6 +12,7 @@ import VoiceAgent from "./pages/services/VoiceAgent";
 import LeadGeneration from "./pages/services/LeadGeneration";
 import GEO from "./pages/services/GEO";
 import CustomAI from "./pages/services/CustomAI";
+import CustomApps from "./pages/services/CustomApps";
 import Packages from "./pages/services/Packages";
 import Cases from "./pages/Cases";
 import Calculator from "./pages/Calculator";
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/services/lead-generation" element={<LeadGeneration />} />
           <Route path="/services/geo" element={<GEO />} />
           <Route path="/services/custom-ai" element={<CustomAI />} />
+          <Route path="/services/custom-apps" element={<CustomApps />} />
           <Route path="/services/packages" element={<Packages />} />
           <Route path="/cases" element={<Cases />} />
           <Route path="/calculator" element={<Calculator />} />

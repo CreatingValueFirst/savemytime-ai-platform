@@ -1,28 +1,32 @@
 import { Link } from "react-router-dom";
 import { Headphones, Mail, Phone, MapPin, Facebook, Linkedin, Instagram } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const footerLinks = {
   services: [
-    { href: "/services#support", label: "24/7 Поддръжка" },
-    { href: "/services#calls", label: "Обработка на обаждания" },
-    { href: "/services#leads", label: "Генериране на лийдове" },
-    { href: "/services#geo", label: "GEO оптимизация" },
-    { href: "/services#custom", label: "Персонализиран AI" },
+    { href: "/services#support", key: "service1" },
+    { href: "/services#calls", key: "service2" },
+    { href: "/services#leads", key: "service3" },
+    { href: "/services#geo", key: "service4" },
+    { href: "/services#custom", key: "service5" },
+    { href: "/services#apps", key: "service6" },
   ],
   company: [
-    { href: "/cases", label: "Кейсове" },
-    { href: "/pricing", label: "Цени" },
-    { href: "/contact", label: "Контакт" },
-    { href: "/auth", label: "Клиентски портал" },
+    { href: "/cases", key: "cases" },
+    { href: "/pricing", key: "pricing" },
+    { href: "/contact", key: "contact" },
+    { href: "/auth", key: "portal" },
   ],
   legal: [
-    { href: "/privacy", label: "Поверителност" },
-    { href: "/terms", label: "Условия за ползване" },
-    { href: "/gdpr", label: "GDPR" },
+    { href: "/privacy", key: "privacy" },
+    { href: "/terms", key: "terms" },
+    { href: "/gdpr", key: "gdpr" },
   ],
 };
 
 export function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-16">
@@ -53,8 +57,7 @@ export function Footer() {
               </div>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
-              Професионални български гласови AI агенти за виртуални рецепционисти.
-              Спестете време и увеличете продажбите с 24/7 автоматизация.
+              {t('footer.description')}
             </p>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors">
@@ -71,7 +74,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h4 className="font-display text-lg font-semibold mb-6">Услуги</h4>
+            <h4 className="font-display text-lg font-semibold mb-6">{t('footer.servicesTitle')}</h4>
             <ul className="space-y-3">
               {footerLinks.services.map((link) => (
                 <li key={link.href}>
@@ -79,7 +82,7 @@ export function Footer() {
                     to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {link.label}
+                    {t(`footer.${link.key}`)}
                   </Link>
                 </li>
               ))}
@@ -88,7 +91,7 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h4 className="font-display text-lg font-semibold mb-6">Компания</h4>
+            <h4 className="font-display text-lg font-semibold mb-6">{t('footer.companyTitle')}</h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
@@ -96,7 +99,7 @@ export function Footer() {
                     to={link.href}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm"
                   >
-                    {link.label}
+                    {t(`footer.${link.key}`)}
                   </Link>
                 </li>
               ))}
@@ -105,23 +108,23 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-display text-lg font-semibold mb-6">Контакти</h4>
+            <h4 className="font-display text-lg font-semibold mb-6">{t('footer.contactTitle')}</h4>
             <ul className="space-y-4">
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Mail className="w-5 h-5 text-primary" />
                 <a href="mailto:info@savemytime.dev" className="hover:text-primary transition-colors">
-                  info@savemytime.dev
+                  {t('footer.email')}
                 </a>
               </li>
               <li className="flex items-center gap-3 text-sm text-muted-foreground">
                 <Phone className="w-5 h-5 text-primary" />
                 <a href="tel:+359888123456" className="hover:text-primary transition-colors">
-                  +359 888 123 456
+                  {t('footer.phone')}
                 </a>
               </li>
               <li className="flex items-start gap-3 text-sm text-muted-foreground">
                 <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <span>София, България</span>
+                <span>{t('footer.location')}</span>
               </li>
             </ul>
           </div>
@@ -130,7 +133,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © {new Date().getFullYear()} Save My Time. Всички права запазени.
+            © {new Date().getFullYear()} {t('footer.copyright')}
           </p>
           <div className="flex gap-6">
             {footerLinks.legal.map((link) => (
@@ -139,7 +142,7 @@ export function Footer() {
                 to={link.href}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                {link.label}
+                {t(`footer.${link.key}`)}
               </Link>
             ))}
           </div>

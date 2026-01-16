@@ -3,49 +3,52 @@ import { Clock, TrendingUp, Shield, Globe, Headphones, Zap } from "lucide-react"
 const benefits = [
   {
     icon: Clock,
-    title: "Спестете 40+ часа месечно",
-    description: "Автоматизирайте рутинните обаждания и оставете екипа си да се фокусира върху важните задачи.",
+    titleKey: "benefit1Title",
+    descKey: "benefit1Desc",
   },
   {
     icon: TrendingUp,
-    title: "Увеличете конверсията с 40%",
-    description: "Никога не пропускайте лийд - AI агентите отговарят мигновено, денонощно.",
+    titleKey: "benefit2Title",
+    descKey: "benefit2Desc",
   },
   {
     icon: Shield,
-    title: "GDPR съвместимост",
-    description: "Пълна защита на данните съгласно европейските регулации и ISO стандарти.",
+    titleKey: "benefit3Title",
+    descKey: "benefit3Desc",
   },
   {
     icon: Globe,
-    title: "Многоезична поддръжка",
-    description: "Обслужвайте клиенти на български, английски и други езици без допълнителни разходи.",
+    titleKey: "benefit4Title",
+    descKey: "benefit4Desc",
   },
   {
     icon: Headphones,
-    title: "Професионални гласове",
-    description: "Избор от 6 български гласа - мъжки и женски, с естествено звучене.",
+    titleKey: "benefit5Title",
+    descKey: "benefit5Desc",
   },
   {
     icon: Zap,
-    title: "Мигновена интеграция",
-    description: "Свързване с вашия CRM, календар и бизнес системи за минути.",
+    titleKey: "benefit6Title",
+    descKey: "benefit6Desc",
   },
 ];
 
+import { useTranslation } from "react-i18next";
+
 export function BenefitsSection() {
+  const { t } = useTranslation();
+
   return (
     <section className="py-24 relative">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">
-            Защо да изберете{" "}
-            <span className="text-gradient-gold">Save My Time</span>?
+            {t('benefits.heading')}{" "}
+            <span className="text-gradient-gold">{t('benefits.headingBrand')}</span>?
           </h2>
           <p className="text-xl text-muted-foreground">
-            Нашите AI гласови агенти са проектирани да спестят време, 
-            да увеличат продажбите и да подобрят клиентското преживяване.
+            {t('benefits.subheading')}
           </p>
         </div>
 
@@ -53,7 +56,7 @@ export function BenefitsSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
             <div
-              key={benefit.title}
+              key={benefit.titleKey}
               className="group relative rounded-2xl p-8 bg-card border border-border hover:border-primary/50 transition-all duration-500 hover:glow-gold-sm"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
@@ -64,10 +67,10 @@ export function BenefitsSection() {
 
               {/* Content */}
               <h3 className="text-xl font-display font-semibold mb-3">
-                {benefit.title}
+                {t(`benefits.${benefit.titleKey}`)}
               </h3>
               <p className="text-muted-foreground leading-relaxed">
-                {benefit.description}
+                {t(`benefits.${benefit.descKey}`)}
               </p>
 
               {/* Hover Effect */}
