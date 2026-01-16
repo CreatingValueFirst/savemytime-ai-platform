@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        display: ['Playfair Display', 'serif'],
+        display: ['Orbitron', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -51,11 +51,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gold: {
-          DEFAULT: "hsl(var(--gold))",
-          light: "hsl(var(--gold-light))",
-          dark: "hsl(var(--gold-dark))",
-          glow: "hsl(var(--gold-glow))",
+        green: {
+          DEFAULT: "hsl(var(--green))",
+          light: "hsl(var(--green-light))",
+          vivid: "hsl(var(--green-vivid))",
+          neon: "hsl(var(--green-neon))",
+          glow: "hsl(var(--green-glow))",
+          dark: "hsl(var(--green-dark))",
         },
         success: {
           DEFAULT: "hsl(var(--success))",
@@ -107,8 +109,9 @@ export default {
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gold-gradient": "linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-light)))",
-        "dark-gradient": "linear-gradient(180deg, hsl(220 15% 5%), hsl(220 15% 8%))",
+        "green-gradient": "linear-gradient(135deg, hsl(var(--green)), hsl(var(--green-light)))",
+        "green-radial": "radial-gradient(circle, hsl(var(--green)) 0%, transparent 70%)",
+        "dark-gradient": "linear-gradient(180deg, hsl(0 0% 3%), hsl(150 10% 5%))",
       },
     },
   },
