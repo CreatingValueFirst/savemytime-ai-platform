@@ -18,7 +18,7 @@ import {
 import { User, Session } from "@supabase/supabase-js";
 import { useToast } from "@/hooks/use-toast";
 import { useTranslation } from "react-i18next";
-import { formatTableDate, formatRelativeTime } from "@/lib/dateUtils";
+import { formatRelativeTime } from "@/lib/dateUtils";
 
 interface Profile {
   full_name: string | null;
@@ -38,7 +38,7 @@ interface Agent {
 export default function Dashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -107,8 +107,8 @@ export default function Dashboard() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     toast({
-      title: "Довиждане!",
-      description: "Успешно излязохте от профила си."
+      title: t('dashboard.logoutToast'),
+      description: t('dashboard.logoutSuccess')
     });
     navigate("/");
   };
@@ -117,17 +117,17 @@ export default function Dashboard() {
     return (
       <Layout>
         <div className="pt-32 pb-20 flex items-center justify-center">
-          <div className="animate-pulse text-muted-foreground">Зареждане...</div>
+          <div className="animate-pulse text-muted-foreground">{t('common.loading')}</div>
         </div>
       </Layout>
     );
   }
 
   const stats = [
-    { label: "Активни агенти", value: agents.filter(a => a.is_active).length.toString(), icon: Bot },
-    { label: "Разговори този месец", value: "0", icon: MessageSquare },
-    { label: "Спестени часове", value: "0", icon: Clock },
-    { label: "Конверсия", value: "0%", icon: TrendingUp }
+    { label: t('dashboard.activeAgents'), value: agents.filter(a => a.is_active).length.toString(), icon: Bot },
+    { label: t('dashboard.conversationsMonth'), value: "0", icon: MessageSquare },
+    { label: t('dashboard.hoursSaved'), value: "0", icon: Clock },
+    { label: t('dashboard.conversion'), value: "0%", icon: TrendingUp }
   ];
 
   return (
@@ -138,20 +138,20 @@ export default function Dashboard() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
               <h1 className="text-3xl font-display font-bold">
-                Здравейте, <span className="text-gradient-gold">{profile?.full_name || "Потребител"}</span>
+                {t('dashboard.welcome')} <span className="text-gradient-gold">{profile?.full_name || t('auth.fullName')}</span>
               </h1>
               <p className="text-muted-foreground">
-                {profile?.company_name || "Вашият клиентски портал"}
+                {profile?.company_name || t('dashboard.yourPortal')}
               </p>
             </div>
             <div className="flex gap-3">
               <Button variant="outline" size="sm" className="gap-2">
                 <Settings className="w-4 h-4" />
-                Настройки
+                {t('dashboard.settings')}
               </Button>
               <Button variant="ghost" size="sm" className="gap-2" onClick={handleLogout}>
                 <LogOut className="w-4 h-4" />
-                Изход
+                {t('dashboard.logout')}
               </Button>
             </div>
           </div>
@@ -176,10 +176,10 @@ export default function Dashboard() {
           {/* Agents Section */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-display font-semibold">Вашите AI агенти</h2>
+              <h2 className="text-2xl font-display font-semibold">{t('dashboard.yourAgents')}</h2>
               <Button className="bg-primary text-primary-foreground hover:bg-primary/90 gap-2">
                 <Plus className="w-4 h-4" />
-                Нов агент
+                {t('dashboard.newAgent')}
               </Button>
             </div>
 
@@ -188,13 +188,13 @@ export default function Dashboard() {
                 <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4">
                   <Bot className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Нямате AI агенти все още</h3>
+                <h3 className="text-xl font-semibold mb-2">{t('dashboard.noAgents')}</h3>
                 <p className="text-muted-foreground mb-6">
-                  Създайте първия си AI агент, за да започнете да автоматизирате обажданията си.
+                  {t('dashboard.noAgentsDesc')}
                 </p>
                 <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Plus className="mr-2 w-4 h-4" />
-                  Създайте агент
+                  {t('dashboard.createAgent')}
                 </Button>
               </div>
             ) : (
@@ -208,7 +208,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                           <h3 className="font-semibold">{agent.name}</h3>
-                          <p className="text-sm text-muted-foreground">Глас: {agent.voice_name}</p>
+                          <p className="text-sm text-muted-foreground">{t('dashboard.voice')}: {agent.voice_name}</p>
                         </div>
                       </div>
                       <div className={`px-2 py-1 rounded-full text-xs ${
@@ -216,22 +216,22 @@ export default function Dashboard() {
                           ? "bg-green-500/20 text-green-400"
                           : "bg-muted text-muted-foreground"
                       }`}>
-                        {agent.is_active ? "Активен" : "Неактивен"}
+                        {agent.is_active ? t('dashboard.active') : t('dashboard.inactive')}
                       </div>
                     </div>
                     {agent.description && (
                       <p className="text-sm text-muted-foreground mb-4">{agent.description}</p>
                     )}
                     <p className="text-xs text-muted-foreground mb-4">
-                      Създаден: {formatRelativeTime(agent.created_at, i18n.language)}
+                      {t('dashboard.created')}: {formatRelativeTime(agent.created_at, i18n.language)}
                     </p>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm" className="flex-1">
-                        Настройки
+                        {t('dashboard.settings')}
                       </Button>
                       <Button variant="outline" size="sm" className="flex-1">
                         <BarChart3 className="w-4 h-4 mr-1" />
-                        Анализи
+                        {t('dashboard.analytics')}
                       </Button>
                     </div>
                   </div>
@@ -242,23 +242,23 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div className="glass rounded-3xl p-8">
-            <h2 className="text-xl font-display font-semibold mb-6">Бързи действия</h2>
+            <h2 className="text-xl font-display font-semibold mb-6">{t('dashboard.quickActions')}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Button variant="outline" className="h-auto py-4 flex flex-col gap-2">
                 <Phone className="w-6 h-6 text-primary" />
-                <span>Тест обаждане</span>
+                <span>{t('dashboard.testCall')}</span>
               </Button>
               <Button variant="outline" className="h-auto py-4 flex flex-col gap-2">
                 <MessageSquare className="w-6 h-6 text-primary" />
-                <span>История на разговорите</span>
+                <span>{t('dashboard.callHistory')}</span>
               </Button>
               <Button variant="outline" className="h-auto py-4 flex flex-col gap-2">
                 <BarChart3 className="w-6 h-6 text-primary" />
-                <span>Детайлни анализи</span>
+                <span>{t('dashboard.detailedAnalytics')}</span>
               </Button>
               <Button variant="outline" className="h-auto py-4 flex flex-col gap-2">
                 <Settings className="w-6 h-6 text-primary" />
-                <span>Интеграции</span>
+                <span>{t('dashboard.integrations')}</span>
               </Button>
             </div>
           </div>
