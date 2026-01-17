@@ -54,6 +54,8 @@
     "notSure": "¿No estás seguro de lo que necesitas?",
     "notSureDesc": "Consulta nuestros paquetes combinados – soluciones listas para las necesidades empresariales más comunes.",
     "viewPackages": "Ver paquetes populares",
+    "aiVisibilityTitle": "Transparencia completa del sistema AI",
+    "aiVisibilityDesc": "Ves exactamente qué hace el agente AI y cómo toma decisiones. Cada conversación se graba, analiza y muestra en tiempo real. Recibes informes detallados de cada llamada - qué dijo el cliente, cómo respondió el agente y cuál fue el resultado. Controlas el comportamiento del AI con reglas claras y puedes ajustarlo en cualquier momento. Sin procesos ocultos - ves y entiendes todo lo que sucede.",
 
     "service1": {
       "title": "Soporte automático al cliente 24/7",
