@@ -56,6 +56,14 @@
     "viewPackages": "View popular packages",
     "aiVisibilityTitle": "Complete AI System Transparency",
     "aiVisibilityDesc": "You see exactly what the AI agent does and how it makes decisions. Every conversation is recorded, analyzed and displayed in real-time. You receive detailed reports for each call - what the customer said, how the agent responded, and what the outcome was. You control the AI's behavior with clear rules and can adjust it at any time. No hidden processes - you see and understand everything that happens.",
+    "aiFeature1Title": "Real-time Recording",
+    "aiFeature1Desc": "Every conversation tracked",
+    "aiFeature2Title": "Detailed Reports",
+    "aiFeature2Desc": "Full call analytics",
+    "aiFeature3Title": "Clear Rules",
+    "aiFeature3Desc": "Full AI behavior control",
+    "aiFeature4Title": "No Hidden Processes",
+    "aiFeature4Desc": "Complete transparency",
 
     "service1": {
       "title": "24/7 Automated Customer Support",

@@ -56,6 +56,14 @@
     "viewPackages": "Ver paquetes populares",
     "aiVisibilityTitle": "Transparencia completa del sistema AI",
     "aiVisibilityDesc": "Ves exactamente qué hace el agente AI y cómo toma decisiones. Cada conversación se graba, analiza y muestra en tiempo real. Recibes informes detallados de cada llamada - qué dijo el cliente, cómo respondió el agente y cuál fue el resultado. Controlas el comportamiento del AI con reglas claras y puedes ajustarlo en cualquier momento. Sin procesos ocultos - ves y entiendes todo lo que sucede.",
+    "aiFeature1Title": "Grabación en tiempo real",
+    "aiFeature1Desc": "Cada conversación rastreada",
+    "aiFeature2Title": "Informes detallados",
+    "aiFeature2Desc": "Análisis completo de llamadas",
+    "aiFeature3Title": "Reglas claras",
+    "aiFeature3Desc": "Control total del comportamiento AI",
+    "aiFeature4Title": "Sin procesos ocultos",
+    "aiFeature4Desc": "Transparencia completa",
 
     "service1": {
       "title": "Soporte automático al cliente 24/7",

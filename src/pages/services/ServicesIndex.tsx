@@ -11,6 +11,8 @@ import {
   Code,
   Package,
   Smartphone,
+  Eye,
+  CheckCircle2,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -143,6 +145,65 @@ export default function ServicesIndex() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* AI Visibility Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="relative group/visibility">
+            {/* Animated glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 rounded-3xl blur-2xl opacity-30 group-hover/visibility:opacity-50 transition-opacity duration-700" />
+
+            <div className="glass rounded-3xl p-8 sm:p-10 md:p-12 max-w-5xl mx-auto relative hover:glow-gold-sm transition-all duration-500">
+              {/* Icon and Title */}
+              <div className="flex flex-col items-center text-center mb-8">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center mb-6 group-hover/visibility:scale-110 group-hover/visibility:rotate-3 transition-all duration-500">
+                  <Eye className="w-8 h-8 sm:w-10 sm:h-10 text-primary group-hover/visibility:scale-110 transition-transform duration-300" />
+                </div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-4 text-gradient-gold">
+                  {t('services.aiVisibilityTitle')}
+                </h2>
+              </div>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg text-muted-foreground text-center max-w-3xl mx-auto mb-8 leading-relaxed">
+                {t('services.aiVisibilityDesc')}
+              </p>
+
+              {/* Key Features Grid */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-8">
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors duration-300">
+                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-sm mb-1">{t('services.aiFeature1Title')}</h4>
+                    <p className="text-xs text-muted-foreground">{t('services.aiFeature1Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors duration-300">
+                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-sm mb-1">{t('services.aiFeature2Title')}</h4>
+                    <p className="text-xs text-muted-foreground">{t('services.aiFeature2Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors duration-300">
+                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-sm mb-1">{t('services.aiFeature3Title')}</h4>
+                    <p className="text-xs text-muted-foreground">{t('services.aiFeature3Desc')}</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 p-4 rounded-xl bg-primary/5 hover:bg-primary/10 transition-colors duration-300">
+                  <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="font-semibold text-sm mb-1">{t('services.aiFeature4Title')}</h4>
+                    <p className="text-xs text-muted-foreground">{t('services.aiFeature4Desc')}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
