@@ -1,5 +1,5 @@
 import { format, formatDistanceToNow } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
+import { toZonedTime } from 'date-fns-tz';
 import { bg, enUS, ru, es } from 'date-fns/locale';
 
 // Sofia, Bulgaria timezone
@@ -27,7 +27,7 @@ export const getDateLocale = (language: string = 'bg') => {
  */
 export const toSofiaTime = (date: string | Date | number): Date => {
   const dateObj = typeof date === 'string' || typeof date === 'number' ? new Date(date) : date;
-  return utcToZonedTime(dateObj, SOFIA_TIMEZONE);
+  return toZonedTime(dateObj, SOFIA_TIMEZONE);
 };
 
 /**

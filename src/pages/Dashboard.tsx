@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -35,15 +36,18 @@ interface Agent {
   updated_at: string;
 }
 
+interface Analytics {
+  conversationsThisMonth: number;
+  hoursSaved: number;
+  conversionRate: number;
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t, i18n } = useTranslation();
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [agents, setAgents] = useState<Agent[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Set up auth state listener
@@ -69,40 +73,87 @@ export default function Dashboard() {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
-  useEffect(() => {
-    if (user) {
-      fetchProfile();
-      fetchAgents();
-    }
-  }, [user]);
+  // Fetch profile with React Query
+  const { data: profile, isLoading: profileLoading } = useQuery({
+    queryKey: ['profile', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("full_name, company_name")
+        .eq("user_id", user.id)
+        .single();
+      if (error) throw error;
+      return data as Profile;
+    },
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
 
-  const fetchProfile = async () => {
-    if (!user) return;
+  // Fetch agents with React Query
+  const { data: agents = [], isLoading: agentsLoading } = useQuery({
+    queryKey: ['agents', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from("agents")
+        .select("*")
+        .eq("user_id", user.id);
+      if (error) throw error;
+      return data as Agent[];
+    },
+    enabled: !!user,
+    staleTime: 5 * 60 * 1000,
+  });
 
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("full_name, company_name")
-      .eq("user_id", user.id)
-      .single();
+  // Fetch analytics with React Query
+  const { data: analytics = { conversationsThisMonth: 0, hoursSaved: 0, conversionRate: 0 } } = useQuery({
+    queryKey: ['analytics', user?.id, agents.map(a => a.id)],
+    queryFn: async () => {
+      if (!user || agents.length === 0) {
+        return { conversationsThisMonth: 0, hoursSaved: 0, conversionRate: 0 };
+      }
 
-    if (!error && data) {
-      setProfile(data);
-    }
-    setIsLoading(false);
-  };
+      // Get first day of current month in Sofia timezone
+      const now = new Date();
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
-  const fetchAgents = async () => {
-    if (!user) return;
+      // Fetch conversations for this month for user's agents
+      const agentIds = agents.map(a => a.id);
 
-    const { data, error } = await supabase
-      .from("agents")
-      .select("*")
-      .eq("user_id", user.id);
+      const { data: conversations, error } = await supabase
+        .from("conversations")
+        .select("duration_seconds, sentiment, created_at")
+        .in("agent_id", agentIds)
+        .gte("created_at", firstDayOfMonth.toISOString());
 
-    if (!error && data) {
-      setAgents(data);
-    }
-  };
+      if (error || !conversations) {
+        console.error("Error fetching analytics:", error);
+        return { conversationsThisMonth: 0, hoursSaved: 0, conversionRate: 0 };
+      }
+
+      // Calculate analytics
+      const conversationsThisMonth = conversations.length;
+
+      // Calculate hours saved (assuming average human call duration is 5 minutes)
+      const totalSeconds = conversations.reduce((sum, c) => sum + (c.duration_seconds || 0), 0);
+      const hoursSaved = Math.round((totalSeconds / 3600) * 10) / 10; // Round to 1 decimal
+
+      // Calculate conversion rate (positive sentiment = successful)
+      const positiveConversations = conversations.filter(
+        c => c.sentiment === "positive" || c.sentiment === "neutral"
+      ).length;
+      const conversionRate = conversationsThisMonth > 0
+        ? Math.round((positiveConversations / conversationsThisMonth) * 100)
+        : 0;
+
+      return { conversationsThisMonth, hoursSaved, conversionRate };
+    },
+    enabled: !!user && agents.length > 0,
+    staleTime: 2 * 60 * 1000, // Cache for 2 minutes (more frequent for analytics)
+  });
+
+  const isLoading = profileLoading || agentsLoading;
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -125,9 +176,9 @@ export default function Dashboard() {
 
   const stats = [
     { label: t('dashboard.activeAgents'), value: agents.filter(a => a.is_active).length.toString(), icon: Bot },
-    { label: t('dashboard.conversationsMonth'), value: "0", icon: MessageSquare },
-    { label: t('dashboard.hoursSaved'), value: "0", icon: Clock },
-    { label: t('dashboard.conversion'), value: "0%", icon: TrendingUp }
+    { label: t('dashboard.conversationsMonth'), value: analytics.conversationsThisMonth.toString(), icon: MessageSquare },
+    { label: t('dashboard.hoursSaved'), value: analytics.hoursSaved.toString(), icon: Clock },
+    { label: t('dashboard.conversion'), value: `${analytics.conversionRate}%`, icon: TrendingUp }
   ];
 
   return (

@@ -150,7 +150,11 @@
     "tryAgain": "Моля, опитайте отново.",
     "wrongCredentials": "Грешен email или парола.",
     "emailExists": "Този email вече е регистриран.",
-    "passwordLength": "Паролата трябва да е поне 6 символа."
+    "passwordLength": "Паролата трябва да е поне 6 символа.",
+    "orContinueWith": "или продължете с",
+    "continueWithGoogle": "Продължи с Google",
+    "continueWithFacebook": "Продължи с Facebook",
+    "socialLoginError": "Грешка при вход. Моля, опитайте отново."
   },
   "dashboard": {
     "welcome": "Здравейте,",

@@ -150,7 +150,11 @@
     "tryAgain": "Por favor, inténtalo de nuevo.",
     "wrongCredentials": "Email o contraseña incorrectos.",
     "emailExists": "Este email ya está registrado.",
-    "passwordLength": "La contraseña debe tener al menos 6 caracteres."
+    "passwordLength": "La contraseña debe tener al menos 6 caracteres.",
+    "orContinueWith": "o continúa con",
+    "continueWithGoogle": "Continuar con Google",
+    "continueWithFacebook": "Continuar con Facebook",
+    "socialLoginError": "Error de inicio de sesión. Por favor, inténtalo de nuevo."
   },
   "dashboard": {
     "welcome": "Hola,",

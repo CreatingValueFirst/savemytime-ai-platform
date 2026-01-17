@@ -40,16 +40,18 @@ export function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/voices">
-                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 glow-gold group">
-                  <Headphones className="w-5 h-5 mr-2" />
+              <Link to="/voices" className="relative group/cta">
+                {/* Animated glow ring */}
+                <div className="absolute inset-0 bg-primary rounded-lg blur-lg opacity-50 group-hover/cta:opacity-75 animate-pulse" />
+                <Button size="lg" className="relative bg-primary text-primary-foreground hover:bg-primary/90 glow-gold group hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-primary/50">
+                  <Headphones className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
                   {t('hero.listenVoices')}
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/contact">
-                <Button size="lg" variant="outline" className="border-primary/50 text-foreground hover:bg-primary/10 group">
-                  <Play className="w-5 h-5 mr-2" />
+                <Button size="lg" variant="outline" className="border-primary/50 text-foreground hover:bg-primary/10 group hover:scale-105 hover:border-primary transition-all duration-300">
+                  <Play className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-300" />
                   {t('hero.freeConsultation')}
                 </Button>
               </Link>
@@ -57,16 +59,16 @@ export function HeroSection() {
 
             {/* Stats */}
             <div className="flex flex-wrap gap-8 pt-8 border-t border-border">
-              <div>
-                <div className="text-3xl font-display font-bold text-gradient-gold">40+</div>
+              <div className="group/stat cursor-default">
+                <div className="text-3xl font-display font-bold text-gradient-gold group-hover/stat:scale-110 transition-transform duration-300">40+</div>
                 <div className="text-sm text-muted-foreground">{t('hero.stat1')}</div>
               </div>
-              <div>
-                <div className="text-3xl font-display font-bold text-gradient-gold">24/7</div>
+              <div className="group/stat cursor-default">
+                <div className="text-3xl font-display font-bold text-gradient-gold group-hover/stat:scale-110 transition-transform duration-300">24/7</div>
                 <div className="text-sm text-muted-foreground">{t('hero.stat2')}</div>
               </div>
-              <div>
-                <div className="text-3xl font-display font-bold text-gradient-gold">70%</div>
+              <div className="group/stat cursor-default">
+                <div className="text-3xl font-display font-bold text-gradient-gold group-hover/stat:scale-110 transition-transform duration-300">70%</div>
                 <div className="text-sm text-muted-foreground">{t('hero.stat3')}</div>
               </div>
             </div>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { 
   Mail, 
   Phone, 
@@ -19,29 +21,52 @@ import {
   Instagram
 } from "lucide-react";
 
+// Form validation schema
+const contactFormSchema = z.object({
+  name: z.string().min(2, "Името трябва да е поне 2 символа").max(100, "Името е твърде дълго"),
+  email: z.string().email("Невалиден email адрес"),
+  phone: z.string()
+    .regex(/^[\+]?[0-9\s\-\(\)]+$/, "Невалиден телефонен номер")
+    .min(10, "Телефонът трябва да е поне 10 цифри")
+    .optional()
+    .or(z.literal("")),
+  company: z.string().max(100, "Името на компанията е твърде дълго").optional(),
+  message: z.string()
+    .min(10, "Съобщението трябва да е поне 10 символа")
+    .max(1000, "Съобщението е твърде дълго")
+    .optional()
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
+
 export default function Contact() {
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    company: "",
-    message: ""
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactFormSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      company: "",
+      message: ""
+    }
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
+  const onSubmit = async (data: ContactFormData) => {
     try {
       // Save as lead
       const { error: leadError } = await supabase.from("leads").insert({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || null,
-        company: formData.company || null,
-        notes: formData.message || null,
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        company: data.company || null,
+        notes: data.message || null,
         source: "contact_form",
         interest: "general"
       });
@@ -50,11 +75,11 @@ export default function Contact() {
 
       // Also save as consultation request
       const { error: consultError } = await supabase.from("consultations").insert({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || null,
-        company: formData.company || null,
-        message: formData.message || null
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        company: data.company || null,
+        message: data.message || null
       });
 
       if (consultError) throw consultError;
@@ -64,13 +89,7 @@ export default function Contact() {
         description: "Ще се свържем с вас в рамките на 24 часа.",
       });
 
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        message: ""
-      });
+      reset(); // Reset form after successful submission
     } catch (error) {
       console.error("Error submitting form:", error);
       toast({
@@ -78,8 +97,6 @@ export default function Contact() {
         description: "Моля, опитайте отново или ни се обадете директно.",
         variant: "destructive"
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -142,24 +159,29 @@ export default function Contact() {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Contact Form */}
-            <div className="glass rounded-3xl p-8">
-              <h2 className="text-2xl font-display font-semibold mb-6 flex items-center gap-3">
-                <Calendar className="w-6 h-6 text-primary" />
-                Запазете консултация
-              </h2>
+            <div className="relative group/form">
+              {/* Subtle animated glow on focus */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10 rounded-3xl blur-xl opacity-0 group-focus-within/form:opacity-100 transition-opacity duration-500" />
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="glass rounded-3xl p-8 relative hover:glow-gold-sm transition-all duration-500">
+                <h2 className="text-2xl font-display font-semibold mb-6 flex items-center gap-3">
+                  <Calendar className="w-6 h-6 text-primary" />
+                  Запазете консултация
+                </h2>
+
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Име *</Label>
                     <Input
                       id="name"
                       placeholder="Вашето име"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      required
-                      className="bg-muted/50"
+                      {...register("name")}
+                      className={`bg-muted/50 ${errors.name ? "border-destructive" : ""}`}
                     />
+                    {errors.name && (
+                      <p className="text-sm text-destructive">{errors.name.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="email">Email *</Label>
@@ -167,11 +189,12 @@ export default function Contact() {
                       id="email"
                       type="email"
                       placeholder="email@example.com"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      required
-                      className="bg-muted/50"
+                      {...register("email")}
+                      className={`bg-muted/50 ${errors.email ? "border-destructive" : ""}`}
                     />
+                    {errors.email && (
+                      <p className="text-sm text-destructive">{errors.email.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -181,20 +204,24 @@ export default function Contact() {
                     <Input
                       id="phone"
                       placeholder="+359 888 123 456"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="bg-muted/50"
+                      {...register("phone")}
+                      className={`bg-muted/50 ${errors.phone ? "border-destructive" : ""}`}
                     />
+                    {errors.phone && (
+                      <p className="text-sm text-destructive">{errors.phone.message}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="company">Компания</Label>
                     <Input
                       id="company"
                       placeholder="Име на компанията"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      className="bg-muted/50"
+                      {...register("company")}
+                      className={`bg-muted/50 ${errors.company ? "border-destructive" : ""}`}
                     />
+                    {errors.company && (
+                      <p className="text-sm text-destructive">{errors.company.message}</p>
+                    )}
                   </div>
                 </div>
 
@@ -203,33 +230,41 @@ export default function Contact() {
                   <Textarea
                     id="message"
                     placeholder="Разкажете ни за вашия бизнес и какво бихте искали да автоматизирате..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                    {...register("message")}
                     rows={5}
-                    className="bg-muted/50"
+                    className={`bg-muted/50 ${errors.message ? "border-destructive" : ""}`}
                   />
+                  {errors.message && (
+                    <p className="text-sm text-destructive">{errors.message.message}</p>
+                  )}
                 </div>
 
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 glow-gold-sm"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    "Изпращане..."
-                  ) : (
-                    <>
-                      <Send className="mr-2 w-5 h-5" />
-                      Изпратете заявка
-                    </>
-                  )}
-                </Button>
+                <div className="relative group/submit">
+                  {/* Pulsing glow effect */}
+                  <div className="absolute inset-0 bg-primary rounded-lg blur-md opacity-50 group-hover/submit:opacity-75 animate-pulse" />
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="relative w-full bg-primary text-primary-foreground hover:bg-primary/90 glow-gold-sm hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-primary/50 group"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      "Изпращане..."
+                    ) : (
+                      <>
+                        <Send className="mr-2 w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+                        Изпратете заявка
+                      </>
+                    )}
+                  </Button>
+                </div>
 
                 <p className="text-xs text-center text-muted-foreground">
                   С изпращането на формуляра се съгласявате с нашата политика за поверителност.
                 </p>
               </form>
+              </div>
             </div>
 
             {/* Contact Info */}

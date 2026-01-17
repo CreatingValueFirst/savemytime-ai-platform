@@ -150,7 +150,11 @@
     "tryAgain": "Пожалуйста, попробуйте снова.",
     "wrongCredentials": "Неверный email или пароль.",
     "emailExists": "Этот email уже зарегистрирован.",
-    "passwordLength": "Пароль должен быть не менее 6 символов."
+    "passwordLength": "Пароль должен быть не менее 6 символов.",
+    "orContinueWith": "или продолжите с",
+    "continueWithGoogle": "Продолжить с Google",
+    "continueWithFacebook": "Продолжить с Facebook",
+    "socialLoginError": "Ошибка входа. Пожалуйста, попробуйте снова."
   },
   "dashboard": {
     "welcome": "Здравствуйте,",
